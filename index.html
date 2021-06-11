@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quotes website</title>
+
+    <style>
+        .container {
+            /* border: 2px solid rgb(248, 115, 115); */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 100px;
+            margin-left: 650px;
+            margin-right: 300px;
+            margin-bottom: 300px;
+            padding: 0%;
+            /* background-color:cyan; */
+            /* opacity: .5; */
+
+        }
+        body{
+            background-image: url(/background.jpg) ;
+            background-repeat: no-repeat;
+            background-size: cover;
+        }
+
+        .number img {
+            height: 50px;
+            width: 50px;
+            margin-left: 700px;
+            /* margin-top: 50px; */
+            /* margin-bottom: 33px; */
+        }
+
+        .text {
+            font-family: cursive;
+            font-weight: bolder; 
+            font-stretch: semi-expanded;
+            /* text-shadow:chartreuse; */
+            padding: 50px;
+            background-color: whitesmoke;
+
+
+        }
+
+        #newq {
+            background-color: coral;
+            align-items: center;
+            justify-content: center;
+            padding: 11px;
+            display: flex;
+            font-family: system-ui;
+            font-weight: 800;
+        }
+        #dynamicquotes{
+            font-size: 2rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: darkkhaki;
+        }
+        .number{
+            font-size: 20px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+      
+        <div class="inner">
+           
+            <div class="box">
+                <p id="dynamicquotes">
+                    =: DYNAMIC QUOTES :=
+                
+                </p>
+                <p class="number">
+                        Click on the twitter image to tweet the below quote --->>>
+                    <img src="/twitter.jpg" alt="image not loaded" title="tweetme" id="tweetme">
+                </p>
+                <div class="text">
+                    <p id="quotes" class="quotes"></p>
+                    <p id="author"></p>
+                </div>
+                <label class="button">
+                    <p id="newq">New Quotes</p>
+                </label>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const quotes = document.getElementById("quotes");
+        const author = document.getElementById("author"); 
+        const newq = document.getElementById("newq");
+        const tweetme = document.getElementById("tweetme");
+        let realdata = "";
+        let quotedata = "";
+
+        const tweetnow = () => {
+            let tweetpost = `http://twitter.com/intent/tweet?text=${quotedata.text} ${quotedata.author} `;
+            window.open(tweetpost);
+        }
+
+        const getnewquotes = () => {
+            let rnum = Math.floor(Math.random() * 1000);
+            quotedata = realdata[rnum];
+            // console.log(realdata[rnum].author);
+            quotes.innerText = `${quotedata.text}`;
+            quotedata.author == null
+                ? (author.innerText = "unknown")
+                : (author.innerText = `${quotedata.author}`);
+
+        };
+        const getquotes = async () => {
+            const api = "https://type.fit/api/quotes";
+            try {
+                let data = await fetch(api);
+                realdata = await data.json();
+                getnewquotes();
+                // console.log(realdata[0].text);
+                // console.log(realdata[0].author);
+            }
+            catch (error) { }
+        };
+        tweetme.addEventListener("click", tweetnow);
+        newq.addEventListener('click', getnewquotes);
+
+        getquotes();
+    </script>
+</body>
+
+</html>
